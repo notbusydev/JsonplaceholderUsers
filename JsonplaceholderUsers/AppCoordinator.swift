@@ -22,8 +22,9 @@ class AppCoordinator: Coordinator {
 	}
 
 	func start() {
-		let userListViewModel = UserListViewModel(coordiantor: self)
+		let userListViewModel = UserListViewModel(coordiantor: self, client: .live)
 		let userListViewController = UserListViewController(viewModel: userListViewModel)
+		userListViewModel.delegate = userListViewController
 		navigationController.setViewControllers([userListViewController], animated: false)
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
@@ -31,8 +32,4 @@ class AppCoordinator: Coordinator {
 }
 
 
-extension AppCoordinator: UserListCoordinator {
-	func toUserDetail(_ user: User) {
 
-	}
-}

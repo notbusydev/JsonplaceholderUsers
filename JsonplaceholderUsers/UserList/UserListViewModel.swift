@@ -7,16 +7,40 @@
 
 import Foundation
 
-typealias UserListCoordinator = UserDetailCoordinatable
+protocol UserListViewModelDelegate: AnyObject {
+	func didFetchData(_ users: [UserViewModel])
+	func didFailWithError(_ error: Error)
+}
 
-class UserListViewModel: UserListViewModelable {
-	weak var userListCoordiantor: UserListCoordinator?
-	init(coordiantor: UserListCoordinator) {
+class UserListViewModel {
+	private let coordiantor: UserListCoordinator
+	private let client: JsonplaceholderClient
 
+	weak var delegate: UserListViewModelDelegate?
+
+	private var users: [User] = []
+
+	init(coordiantor: UserListCoordinator, client: JsonplaceholderClient) {
+		self.coordiantor = coordiantor
+		self.client = client
 	}
 }
 
+extension UserListViewModel: UserListViewModelable {
 
-protocol UserDetailCoordinatable: AnyObject {
-	func toUserDetail(_ user: User)
+	func fetch() {
+		Task {
+			do {
+				let users = try await client.fetchUsers()
+				self.users = users
+				self.delegate?.didFetchData(users.map({ UserViewModel(user: $0) }))
+			} catch {
+				self.delegate?.didFailWithError(error)
+			}
+		}
+	}
+
+	func select(indexPath: IndexPath) {
+
+	}
 }
