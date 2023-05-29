@@ -41,6 +41,7 @@ extension UserListViewModel: UserListViewModelable {
 	}
 
 	func select(indexPath: IndexPath) {
-
+		let selectedUser = self.users[indexPath.row]
+		coordiantor.toUserDetail(selectedUser)
 	}
 }

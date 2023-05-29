@@ -13,6 +13,8 @@ protocol UserListCoordinator: AnyObject {
 
 extension AppCoordinator: UserListCoordinator {
 	func toUserDetail(_ user: User) {
-		
+		let userDetailViewController = UserDetailViewController()
+		userDetailViewController.viewModel = UserDetailViewModel(user: user, coordinator: self)
+		navigationController.pushViewController(userDetailViewController, animated: true)
 	}
 }

@@ -45,7 +45,7 @@ class UserListViewController: UIViewController {
 		tableView.dataSource = self
 		tableView.refreshControl = refreshControl
 		refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-		
+		retryView.isHidden = true
 		retryView.onRetry = { [weak self] in
 			self?.viewModel.fetch()
 		}
@@ -77,6 +77,10 @@ extension UserListViewController: UserListViewModelDelegate {
 }
 
 extension UserListViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		viewModel.select(indexPath: indexPath)
+	}
+
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		return UITableView.automaticDimension
 	}

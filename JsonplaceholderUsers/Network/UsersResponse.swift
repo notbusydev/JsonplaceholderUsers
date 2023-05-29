@@ -47,6 +47,12 @@ struct Address: Codable {
 		}
 }
 
+extension Address {
+	var fullAddress: String {
+		"\(street), \(suite), \(city), \(zipcode)"
+	}
+}
+
 // MARK: - Geo
 struct Geo: Codable {
 		let lat: String

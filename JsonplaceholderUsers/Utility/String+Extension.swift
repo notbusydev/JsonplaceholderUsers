@@ -9,6 +9,14 @@ import Foundation
 
 extension String {
 	var toURL: URL? {
-		URL(string: self)
+		if let urlString = self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+			return URL(string: urlString)
+		} else {
+			return URL(string: self)
+		}
+	}
+
+	var toDouble: Double? {
+		Double(self)
 	}
 }
