@@ -13,7 +13,7 @@ protocol UserDetailViewModelable: AnyObject {
 	var userName: String? { get }
 	var email: String? { get }
 	var phone: String? { get }
-	var companyDescription: String? { get }
+	var companyName: String? { get }
 	var website: String? { get }
 	var address: String? { get }
 	var location: Location? { get }
@@ -22,6 +22,8 @@ protocol UserDetailViewModelable: AnyObject {
 	func toCall()
 	func toWebsite()
 }
+
+typealias Location = CLLocationCoordinate2D
 
 class UserDetailViewController: UIViewController {
 	@IBOutlet weak var nameLabel: UILabel!
@@ -37,18 +39,17 @@ class UserDetailViewController: UIViewController {
 
 	override func viewDidLoad() {
         super.viewDidLoad()
+		
+		initUI()
 		initBind()
-		emailButton.addTarget(self, action: #selector(self.emailButtonTouched(sender:)), for: .touchUpInside)
-		phoneButton.addTarget(self, action: #selector(self.phoneButtonTouched(sender:)), for: .touchUpInside)
-		websiteButton.addTarget(self, action: #selector(self.websiteButtonTouched(sender:)), for: .touchUpInside)
     }
 
-	fileprivate func initBind() {
+	fileprivate func initUI() {
 		nameLabel.text = viewModel.name
 		userNameLabel.text = viewModel.userName
 		emailButton.setTitle(viewModel.email, for: .normal)
 		phoneButton.setTitle(viewModel.phone, for: .normal)
-		companyLabel.text = viewModel.companyDescription
+		companyLabel.text = viewModel.companyName
 		websiteButton.setTitle(viewModel.website, for: .normal)
 		addressLabel.text = viewModel.address
 		if let location = viewModel.location {
@@ -59,6 +60,12 @@ class UserDetailViewController: UIViewController {
 			locationMapView.setCenter(coordinate, animated: false)
 			locationMapView.addAnnotation(annotation)
 		}
+	}
+
+	fileprivate func initBind() {
+		emailButton.addTarget(self, action: #selector(self.emailButtonTouched(sender:)), for: .touchUpInside)
+		phoneButton.addTarget(self, action: #selector(self.phoneButtonTouched(sender:)), for: .touchUpInside)
+		websiteButton.addTarget(self, action: #selector(self.websiteButtonTouched(sender:)), for: .touchUpInside)
 	}
 
 	@objc func emailButtonTouched(sender: UIButton) {
@@ -72,9 +79,4 @@ class UserDetailViewController: UIViewController {
 	@objc func websiteButtonTouched(sender: UIButton) {
 		viewModel.toWebsite()
 	}
-}
-
-struct Location {
-	let latitude: Double
-	let longitude: Double
 }

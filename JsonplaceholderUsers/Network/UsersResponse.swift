@@ -7,7 +7,9 @@
 
 import Foundation
 
-// MARK: - Address
+typealias UsersResponse = [User]
+
+// MARK: - User
 struct User: Codable {
 		let id: Int
 		let name: String
@@ -28,53 +30,53 @@ struct User: Codable {
 				case website
 				case company
 		}
-}
 
-// MARK: - Address
-struct Address: Codable {
-		let street: String
-		let suite: String
-		let city: String
-		let zipcode: String
-		let geo: Geo
+	// MARK: - Company
+	struct Company: Codable {
+			let name: String
+			let catchPhrase: String
+			let bs: String
 
-		enum CodingKeys: String, CodingKey {
-				case street
-				case suite
-				case city
-				case zipcode
-				case geo
+			enum CodingKeys: String, CodingKey {
+					case name
+					case catchPhrase
+					case bs
+			}
+	}
+
+	// MARK: - Address
+	struct Address: Codable {
+			let street: String
+			let suite: String
+			let city: String
+			let zipcode: String
+			let geo: Geo
+
+			enum CodingKeys: String, CodingKey {
+					case street
+					case suite
+					case city
+					case zipcode
+					case geo
+			}
+		var fullAddress: String {
+			"\(street), \(suite), \(city), \(zipcode)"
 		}
-}
 
-extension Address {
-	var fullAddress: String {
-		"\(street), \(suite), \(city), \(zipcode)"
+		var location: Location? {
+			guard let lat = geo.lat.toDouble, let lng = geo.lng.toDouble else { return nil }
+			return Location(latitude: lat, longitude: lng)
+		}
+
+		// MARK: - Geo
+		struct Geo: Codable {
+				let lat: String
+				let lng: String
+
+				enum CodingKeys: String, CodingKey {
+						case lat
+						case lng
+				}
+		}
 	}
 }
-
-// MARK: - Geo
-struct Geo: Codable {
-		let lat: String
-		let lng: String
-
-		enum CodingKeys: String, CodingKey {
-				case lat
-				case lng
-		}
-}
-
-// MARK: - Company
-struct Company: Codable {
-		let name: String
-		let catchPhrase: String
-		let bs: String
-
-		enum CodingKeys: String, CodingKey {
-				case name
-				case catchPhrase
-				case bs
-		}
-}
-
-typealias UsersResponse = [User]

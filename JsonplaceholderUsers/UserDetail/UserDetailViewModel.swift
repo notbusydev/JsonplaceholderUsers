@@ -33,7 +33,7 @@ extension UserDetailViewModel: UserDetailViewModelable {
 		user.phone
 	}
 
-	var companyDescription: String? {
+	var companyName: String? {
 		user.company.name
 	}
 
